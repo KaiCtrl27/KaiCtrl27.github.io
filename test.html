@@ -1,0 +1,139 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="icon" href="icon.png" type="image/png">
+	 <style>
+        #gif 
+		{
+            position: absolute;
+            top: 50px; 
+            right: 10px;
+            width: 150px; 
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+	<nav>
+        <ul>
+           <li><a href="index.html">Главная</a></li>
+            <li><a href="test.html">Тест</a></li>
+            <li><a href="game.html">Игруля</a></li>
+        </ul>
+    </nav>
+	<img id = "gif" src="catTest.gif">
+        <div class="question">
+            <p>1. Сколько фильмов я сказала тебе посмотреть в начале нашего общения?</p>
+            <div class="options">
+                <label>
+                    <input type="radio" name="q1" value="3"> 3
+                </label>
+                <label>
+                    <input type="radio" name="q1" value="25"> 25
+                </label>
+                <label>
+                    <input type="radio" name="q1" value="23"> 23
+                </label>
+            </div>
+        </div>
+
+		<div class="question">
+            <p>2. Что ты ответил на вопрос: Нравится время со мной проводить?</p>
+            <div class="options">
+                <label>
+                    <input type="radio" name="q2" value="Xolod"> Кинул трек ХОЛОД
+                </label>
+                <label>
+                    <input type="radio" name="q2" value="Yes"> Да
+                </label>
+                <label>
+                    <input type="radio" name="q2" value="Nichego"> Ничего не ответил
+                </label>
+            </div>
+        </div>
+		<div class="question">
+            <p>3. Какой у тебя был никнейм в начале нашего общения (Steam)?</p>
+            <div class="options">
+                <label>
+                    <input type="radio" name="q3" value="Manya"> Манёнок
+                </label>
+                <label>
+                    <input type="radio" name="q3" value="addicted"> addicted
+                </label>
+                <label>
+                    <input type="radio" name="q3" value="victim"> victim
+                </label>
+            </div>
+        </div>
+        <div class="question">
+            <p>4. Какие треки у меня ассоциируются с нами? (Выбери несколько вариантов ответа)</p>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="q4" value="XOLOD1"> ХОЛОД
+                </label>
+                <label>
+                    <input type="checkbox" name="q4" value="alaska1"> ALASKA
+                </label>
+                <label>
+                    <input type="checkbox" name="q4" value="Homecoming"> Homecoming
+                </label>
+            </div>
+        </div>
+		<div class="question">
+            <p>5. Какие строчки у меня ассоциируются с тобой? (Выбери несколько вариантов ответа)</p>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="q5" value="lungs"> Сядь напротив меня/Только ты в моих снах/Свяжет ли нас судьба?/Кто знает, может, это правда?
+                </label>
+                <label>
+                    <input type="checkbox" name="q5" value="xolod"> Да, с тобой, хм, базарить — это будто бег по минам
+                </label>
+                <label>
+                    <input type="checkbox" name="q5" value="ALASKA"> На новом месте я вижу нас вместе (Воу)
+                </label>
+				<label>
+                    <input type="checkbox" name="q5" value="razrushit"> Я не знаю, что происходит в моей жизни реально (Реально)/Но я знаю, когда ты со мной рядом, то я летаю (Я умираю)/
+					Но я сделал выбор и поставил на то, что между нами/Ты мне доверяешь
+                </label>
+            </div>
+        </div>
+        <button onclick="checkAnswers()">Проверить ответы</button>
+	<script>
+		function checkAnswers() 
+		{
+			let score = 0;
+		
+			const q1 = document.querySelector('input[name="q1"]:checked');
+			const q2 = document.querySelector('input[name="q2"]:checked');
+			const q3 = document.querySelector('input[name="q3"]:checked');
+			const q4 = document.querySelectorAll('input[name="q4"]:checked');
+			const q5 = document.querySelectorAll('input[name="q5"]:checked');
+
+			if (q1 && q1.value === "25") score++;
+
+			if (q2 && q2.value === "Xolod") score++;
+
+			if (q3 && q3.value === "Manya") score++;
+
+			const correctAnswers4 = ["XOLOD1", "alaska1", "Homecoming"];
+			const userAnswers4 = Array.from(q4).map(input => input.value);
+			const isCorrect4 = correctAnswers4.every(answer => userAnswers4.includes(answer)) && userAnswers4.length === correctAnswers4.length;
+			if (isCorrect4) score++;
+
+			const correctAnswers5 = ["lungs", "ALASKA", "razrushit"];
+			const userAnswers5 = Array.from(q5).map(input => input.value);
+			const isCorrect5 = correctAnswers5.every(answer => userAnswers5.includes(answer)) && userAnswers5.length === correctAnswers5.length;
+			if (isCorrect5) score++;
+
+			if (score === 5) {
+				alert("Первая часть кодового предложения: You're on");
+			} else {
+				alert(`Ты ответил правильно на ${score} из 5 вопросов. Попробуй ещё раз!`);
+			}
+		}
+	</script>
+</body>
+</html>

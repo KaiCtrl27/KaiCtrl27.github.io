@@ -1,0 +1,137 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="icon" href="icon.png" type="image/png">
+	 <style>
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+			position: center;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #000;
+        }
+        .hidden {
+            pointer-events: none;
+        }
+		#gif 
+		{
+            position: absolute;
+            top: 50px; 
+            left: 300px;
+			width: 400px; 
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+	<nav>
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="test.html">Тест</a></li>
+            <li><a href="game.html">Игруля</a></li>
+        </ul>
+    </nav>
+	<img id = "gif" src = "catGame.gif">
+	<h1>Игра крестики-нолики</h1>
+	<div id="board"></div>
+	<button id="restart" style="display: none;">Начать заново</button>
+	<div id="message"></div>
+	<script>
+		const board = document.getElementById('board');
+		const restartButton = document.getElementById('restart');
+		const message = document.getElementById('message');
+		let currentPlayer = 'X';
+		let gameActive = true;
+		const cells = Array(9).fill('');
+
+		function createBoard() {
+			board.innerHTML = '';
+			cells.fill('');
+			currentPlayer = 'X';
+			gameActive = true;
+			message.innerText = '';
+
+			for (let i = 0; i < 9; i++) {
+				const cell = document.createElement('div');
+				cell.classList.add('cell');
+				cell.dataset.index = i;
+				cell.onclick = () => makeMove(cell, i);
+				board.appendChild(cell);
+			}
+			restartButton.style.display = 'none';
+		}
+
+		function makeMove(cell, index) {
+			if (!gameActive || cells[index]) return;
+
+			cells[index] = currentPlayer;
+			cell.innerText = currentPlayer;
+			cell.classList.add('hidden');
+			checkGameStatus();
+
+			if (gameActive) {
+				currentPlayer = 'O'; 
+				setTimeout(aiMove, 200);
+			}
+		}
+
+		function aiMove() {
+			const emptyIndices = cells.map((cell, index) => (cell === '' ? index : null)).filter(index => index !== null);
+			if (emptyIndices.length === 0) return;
+			const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+			cells[randomIndex] = currentPlayer;
+			const cell = document.querySelector(`.cell[data-index='${randomIndex}']`);
+			cell.innerText = currentPlayer;
+			cell.classList.add('hidden');
+			checkGameStatus();
+
+			currentPlayer = 'X';
+		}
+
+		function checkGameStatus() {
+			const winningCombinations = [
+				[0, 1, 2], [3, 4, 5], [6, 7, 8],
+				[0, 3, 6], [1, 4, 7], [2, 5, 8],
+				[0, 4, 8], [2, 4, 6]
+			];
+
+			for (let combination of winningCombinations) {
+				const [a, b, c] = combination;
+				if (cells[a] && cells[a] === cells[b] && cells[b] === cells[c]) {
+					if (cells[a] === 'X') {
+						alert('Молодчина ты выиграл! Вторая часть кодового предложения: my mind');
+					} else {
+						alert('ИИ выиграл! Попробуй еще раз!'); // Сообщение для победы ИИ
+					}
+					gameActive = false;
+					restartButton.style.display = 'block';
+					return;
+				}
+			}
+
+			if (!cells.includes('')) {
+				alert('Ничья! Сыграй еще раз!');
+				gameActive = false;
+				restartButton.style.display = 'block';
+			}
+		}
+
+		restartButton.onclick = createBoard;
+
+		createBoard();
+	</script>
+</body>
+</html>
